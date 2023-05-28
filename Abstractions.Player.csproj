@@ -57,13 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Abstractions\ISelectable.cs" />
-    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\ICommandExecutor.cs" />
-    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\ICommand.cs" />
-    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\Commands\IProduceUnitCommand.cs" />
-    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\Commands\IAttackCommand.cs" />
-    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\Commands\IMoveCommand.cs" />
-    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\Commands\IPatrolCommand.cs" />
-    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\Commands\IStopCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Scripts\Abstractions\Abstractions.asmdef" />
@@ -656,10 +649,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Utils.Player.csproj">
-      <Project>{2F34BBBF-E77A-AD45-4CC1-A0DAA34EF25C}</Project>
-      <Name>Utils.Player</Name>
-    </ProjectReference>
     <ProjectReference Include="UnityEngine.UI.Player.csproj">
       <Project>{C91B6651-0B5F-F599-822F-889F02919B35}</Project>
       <Name>UnityEngine.UI.Player</Name>

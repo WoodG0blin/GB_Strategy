@@ -15,8 +15,6 @@ namespace Strategy
         [SerializeField] private Slider _healthSlider;
         [SerializeField] private TextMeshProUGUI _healthText;
 
-        [field : SerializeField] public ControlsUIView Controls { get; private set; }
-
         public void DisplaySelected(ISelectable selected)
         {
             if(selected != null)

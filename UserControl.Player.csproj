@@ -56,19 +56,10 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\UserControl\Controller\InputController.cs" />
-    <Compile Include="Assets\Scripts\UserControl\View\LevelObjectUIView.cs" />
-    <Compile Include="Assets\Scripts\UserControl\UserControlManager.cs" />
     <Compile Include="Assets\Scripts\UserControl\View\InputView.cs" />
-    <Compile Include="Assets\Scripts\UserControl\UserCommands\ProduceBaseUnit.cs" />
-    <Compile Include="Assets\Scripts\UserControl\View\ControlsUIView.cs" />
-    <Compile Include="Assets\Scripts\UserControl\Highlighter.cs" />
-    <Compile Include="Assets\Scripts\UserControl\Controller\CommandsController.cs" />
-    <Compile Include="Assets\Scripts\UserControl\Model\UserControlsModel.cs" />
-    <Compile Include="Assets\Scripts\UserControl\UserCommands\Attack.cs" />
-    <Compile Include="Assets\Scripts\UserControl\UserCommands\Move.cs" />
-    <Compile Include="Assets\Scripts\UserControl\UserCommands\Hold.cs" />
-    <Compile Include="Assets\Scripts\UserControl\UserCommands\Patrol.cs" />
+    <Compile Include="Assets\Scripts\UserControl\Controller\InputController.cs" />
+    <Compile Include="Assets\Scripts\UserControl\UserControlManager.cs" />
+    <Compile Include="Assets\Scripts\UserControl\View\LevelObjectUIView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Scripts\UserControl\UserControl.asmdef" />

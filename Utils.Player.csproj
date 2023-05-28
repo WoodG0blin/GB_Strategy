@@ -57,9 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Utils\SubscribtableProperty.cs" />
-    <Compile Include="Assets\Scripts\Utils\AssetInjection\InjectAssetAttribute.cs" />
-    <Compile Include="Assets\Scripts\Utils\AssetInjection\AssetContext.cs" />
-    <Compile Include="Assets\Scripts\Utils\AssetInjection\AssetInjector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Scripts\Utils\Utils.asmdef" />

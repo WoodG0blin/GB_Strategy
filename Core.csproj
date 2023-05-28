@@ -56,16 +56,7 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Core\CommandExecutions\CommandExecutor.cs" />
-    <Compile Include="Assets\Scripts\Core\BaseBuilding.cs" />
-    <Compile Include="Assets\Scripts\Core\BaseDecoration.cs" />
-    <Compile Include="Assets\Scripts\Core\BaseUnit.cs" />
-    <Compile Include="Assets\Scripts\Core\CommandExecutions\ProduceUnitExecutor.cs" />
-    <Compile Include="Assets\Scripts\Core\CommandExecutions\AttackExecutor.cs" />
-    <Compile Include="Assets\Scripts\Core\CommandExecutions\MoveExecutor.cs" />
-    <Compile Include="Assets\Scripts\Core\CommandExecutions\HoldExecutor.cs" />
-    <Compile Include="Assets\Scripts\Core\CommandExecutions\PatrolExecutor.cs" />
-    <Compile Include="Assets\Scripts\Core\BaseExecutor.cs" />
+    <Compile Include="Assets\Scripts\Core\LevelObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Scripts\Core\Core.asmdef" />
@@ -754,10 +745,6 @@
     <ProjectReference Include="Abstractions.csproj">
       <Project>{180C13AF-1CF7-60CE-E257-1BF3386EBB1B}</Project>
       <Name>Abstractions</Name>
-    </ProjectReference>
-    <ProjectReference Include="Utils.csproj">
-      <Project>{82B9B73E-FC87-DB2C-2023-4FB17176C4C3}</Project>
-      <Name>Utils</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{250FF7ED-688A-EDDA-BCDE-9F991F0BDAF8}</Project>
