@@ -1,26 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Windows;
 using WizardsPlatformer;
 
 namespace Strategy
 {
-    public class UserControlManager
+    public class UserControlManager : MonoBehaviour
     {
+        [SerializeField] private Transform input;
+        [SerializeField] private Transform levelObjectUI;
+        [SerializeField] private Transform controlsPanel;
+
         private InputController _inputController;
         private LevelObjectUIView _levelObjectUIView;
         private SubscribtableProperty<ISelectable> _currentSelected;
+        private UserControlsModel _userControlsModel;
+        private CommandsController _commandsController;
 
-        public UserControlManager(Transform input, Transform levelObjectUI)
+        private void Start()
         {
+            _userControlsModel = new UserControlsModel();
+            _inputController = new InputController(input.GetComponent<InputView>());
+            _levelObjectUIView = levelObjectUI.GetComponent<LevelObjectUIView>();
+            _commandsController = new CommandsController(controlsPanel.GetComponent<IControlsUIView>());
+
+
             _currentSelected = new SubscribtableProperty<ISelectable>();
 
-            _inputController = new InputController(input.GetComponent<InputView>());
-            _inputController.OnSelection += s => _currentSelected.Value = s;
+            _inputController.OnSelection += s => _userControlsModel.CurrentSelected.Value = s;
 
-            _levelObjectUIView = levelObjectUI.GetComponent<LevelObjectUIView>();
-
-            _currentSelected.SubscribeOnValueChange(s => _levelObjectUIView.DisplaySelected(s));
+            _userControlsModel.CurrentSelected.SubscribeOnValueChange(s => _levelObjectUIView.DisplaySelected(s));
+            _userControlsModel.CurrentSelected.SubscribeOnValueChange(s => _commandsController.OnSelectedChanged(s));
+            
         }
     }
 }

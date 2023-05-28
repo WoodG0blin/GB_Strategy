@@ -57,6 +57,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Abstractions\ISelectable.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\ICommandExecutor.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\ICommand.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\Commands\IProduceUnitCommand.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\Commands\IAttackCommand.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\Commands\IMoveCommand.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\Commands\IPatrolCommand.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\CommandSystem\Commands\IStopCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Scripts\Abstractions\Abstractions.asmdef" />
@@ -742,6 +749,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Utils.csproj">
+      <Project>{82B9B73E-FC87-DB2C-2023-4FB17176C4C3}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{250FF7ED-688A-EDDA-BCDE-9F991F0BDAF8}</Project>
       <Name>UnityEditor.UI</Name>

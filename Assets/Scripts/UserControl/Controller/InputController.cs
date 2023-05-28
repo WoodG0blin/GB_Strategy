@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using WizardsPlatformer;
 
 namespace Strategy
 {
@@ -13,6 +14,7 @@ namespace Strategy
         private IInputView _inputView;
         private Camera _camera;
         private ISelectable _currentSelected;
+        private Highlighter _highlighter;
 
         public event Action<ISelectable> OnSelection;
         public InputController(IInputView input)
@@ -22,6 +24,8 @@ namespace Strategy
             _inputView.OnRightClick += OnRightClick;
 
             _camera = Camera.main;
+
+            _highlighter = new Highlighter();
         }
 
         public void Dispose()
@@ -38,14 +42,14 @@ namespace Strategy
 
             if (hits == null || EventSystem.current.IsPointerOverGameObject()) return;
 
-            _currentSelected?.Highlight(false);
+            _highlighter.HighLight(_currentSelected, false);
 
             _currentSelected = hits
                 .Select(hit => hit.collider.GetComponentInParent<ISelectable>())
                 .Where(c => c != null)
                 .FirstOrDefault();
 
-            _currentSelected?.Highlight(true);
+            _highlighter.HighLight(_currentSelected, true);
 
             OnSelection?.Invoke(_currentSelected);
         }
