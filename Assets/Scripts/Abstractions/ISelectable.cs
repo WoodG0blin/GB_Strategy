@@ -10,6 +10,5 @@ namespace Strategy
         public Sprite Icon { get; }
         public int Health { get; }
         public int MaxHealth { get; }
-        public void Highlight(bool on);
     }
 }

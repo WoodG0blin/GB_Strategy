@@ -12,7 +12,7 @@ namespace Strategy
         [SerializeField] Transform _levelObjectUI;
         void Start()
         {
-            _inputController = new UserControlManager(_input, _levelObjectUI);
+            //_inputController = new UserControlManager(_input, _levelObjectUI);
         }
 
         void Update()
