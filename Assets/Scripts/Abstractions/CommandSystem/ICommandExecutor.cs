@@ -7,7 +7,6 @@ namespace Strategy
 {
     public interface ICommandExecutor
     {
-        IEnumerable<Type> CommandTypes { get; }
         void Execute(ICommand command);
     }
 }

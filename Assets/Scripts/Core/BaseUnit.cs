@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Strategy
 {
-    internal class BaseUnit : BaseExecutor
+    internal class BaseUnit : BaseLevelObject
     {
     }
 }
