@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Strategy
 {
@@ -26,10 +27,8 @@ namespace Strategy
 
         private bool _pending;
 
-        public CommandsModel()
-        {
-            _commandsFactory = new CommandFactory();
-        }
+        [Inject]
+        private void Init(CommandFactory factory) => _commandsFactory= factory;
 
         public void OnCommandButtonClicked(ICommandExecutor executor)
         {

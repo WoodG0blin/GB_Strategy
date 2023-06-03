@@ -1,4 +1,5 @@
 using System;
+using Zenject;
 
 namespace Strategy
 {
@@ -7,11 +8,10 @@ namespace Strategy
         private IControlsUIView _view;
         private ICommandsModel _model;
 
-        public CommandsController(IControlsUIView view)
+        public CommandsController(IControlsUIView view, ICommandsModel model)
         {
-            _model = new CommandsModel();
-
             _view = view;
+            _model = model;
             _view.OnCommand += _model.OnCommandButtonClicked;
             _model.OnCommandChosen += _view.BlockCommands;
             _model.OnCommandCanceled += _view.UnBlockCommands;

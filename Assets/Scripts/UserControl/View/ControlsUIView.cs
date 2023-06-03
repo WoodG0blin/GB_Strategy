@@ -51,7 +51,11 @@ namespace Strategy
 
         public void Clear()
         {
-            foreach(Button b in _buttonsDictionary.Values) SetActiveButton(b, false);
+            foreach (Button b in _buttonsDictionary.Values)
+            {
+                b.onClick.RemoveAllListeners();
+                SetActiveButton(b, false);
+            }
         }
 
         private void SetActiveButton(Button b, bool active) => b.transform.parent.gameObject.SetActive(active);
