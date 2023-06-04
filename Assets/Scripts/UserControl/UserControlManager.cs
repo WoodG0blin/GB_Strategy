@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows;
-using WizardsPlatformer;
 using Zenject;
 
 namespace Strategy
@@ -28,10 +27,11 @@ namespace Strategy
             _inputController.OnSelection += s => _userControlsModel.CurrentSelected.Value = s;
             _inputController.OnLeftClick += lp => _userControlsModel.LeftClickPosition.Value = lp;
             _inputController.OnRightClick += rp => _userControlsModel.RightClickPosition.Value = rp;
+            _inputController.OnRightSelection += rs => _userControlsModel.TargetSelected.Value = rs;
 
             _userControlsModel.CurrentSelected.SubscribeOnValueChange(s => _levelObjectUIView.DisplaySelected(s));
             _userControlsModel.CurrentSelected.SubscribeOnValueChange(s => _commandsController.OnSelectedChanged(s));
-            
+            _commandsController.OnCommandIssued += (s) => { _userControlsModel.CurrentSelected.Value = s; _inputController.OnSelectionChanged(s); };
         }
     }
 }

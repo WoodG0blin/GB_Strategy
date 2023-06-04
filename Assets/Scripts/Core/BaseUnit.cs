@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Strategy
 {
-    internal class BaseUnit : BaseLevelObject
+    internal class BaseUnit : BaseLevelObject, IDamagable
     {
     }
 }

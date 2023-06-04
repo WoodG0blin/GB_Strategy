@@ -6,7 +6,14 @@ namespace Strategy
 {
     internal class Highlighter
     {
-        public void HighLight(ISelectable selected, bool on)
+        private ISelectable _currentSelected;
+        public void HighLight(ISelectable selected)
+        {
+            HighLight(_currentSelected, false);
+            _currentSelected = selected;
+            HighLight(_currentSelected, true);
+        }
+        private void HighLight(ISelectable selected, bool on)
         {
             if (selected == null) return;
 

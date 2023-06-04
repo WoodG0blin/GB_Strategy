@@ -1,6 +1,6 @@
 using System;
 
-namespace WizardsPlatformer
+namespace Strategy
 {
     public class SubscribtableProperty<T>
     {

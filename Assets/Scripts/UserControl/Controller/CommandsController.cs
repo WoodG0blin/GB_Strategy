@@ -8,6 +8,8 @@ namespace Strategy
         private IControlsUIView _view;
         private ICommandsModel _model;
 
+        public event Action<ISelectable> OnCommandIssued;
+
         public CommandsController(IControlsUIView view, ICommandsModel model)
         {
             _view = view;
@@ -16,6 +18,7 @@ namespace Strategy
             _model.OnCommandChosen += _view.BlockCommands;
             _model.OnCommandCanceled += _view.UnBlockCommands;
             _model.OnCommandIssued += _view.UnBlockCommands;
+            _model.OnCommandIssued += () => OnCommandIssued?.Invoke(null);
         }
 
         public void Dispose()
@@ -24,6 +27,7 @@ namespace Strategy
             _model.OnCommandChosen -= _view.BlockCommands;
             _model.OnCommandCanceled -= _view.UnBlockCommands;
             _model.OnCommandIssued -= _view.UnBlockCommands;
+            _model.OnCommandIssued -= () => OnCommandIssued?.Invoke(null);
             _view = null;
         }
 

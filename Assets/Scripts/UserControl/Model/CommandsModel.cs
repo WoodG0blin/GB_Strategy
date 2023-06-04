@@ -49,7 +49,7 @@ namespace Strategy
 
         private void OnCommandCreated(ICommand command)
         {
-            _executor.Execute(command);
+            if(command != null) _executor.Execute(command);
             _pending = false;
             OnCommandIssued?.Invoke();
         }

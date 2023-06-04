@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace Strategy
 {
-    public interface IPatrolCommand : ICommand
+    public interface IDamagable
     {
-        Vector3 PatrolTarget { get; }
     }
 }
