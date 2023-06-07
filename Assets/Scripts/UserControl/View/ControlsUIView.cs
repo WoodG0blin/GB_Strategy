@@ -8,11 +8,11 @@ namespace Strategy
 {
     internal interface IControlsUIView
     {
-        event Action<Type> OnCommand;
+        event Action<ICommandExecutor> OnCommand;
 
         void Clear();
-        void SetLayout(IEnumerable<Type> commandTypes);
-        void BlockCommands();
+        void SetLayout(List<ICommandExecutor> commandTypes);
+        void BlockCommands(ICommandExecutor executor);
         void UnBlockCommands();
     }
 
@@ -22,7 +22,7 @@ namespace Strategy
 
         private Dictionary<Type, Button> _buttonsDictionary;
 
-        public event Action<Type> OnCommand;
+        public event Action<ICommandExecutor> OnCommand;
 
         void Start()
         {
@@ -31,7 +31,8 @@ namespace Strategy
             for(int i = 0; i < _controlsContainer.childCount; i++)
             {
                 var _buttonGO = _controlsContainer.GetChild(i);
-                _buttonsDictionary.Add(ConvertNameToType(_buttonGO.name), _buttonGO.GetComponentInChildren<Button>());
+                var type = ConvertNameToType(_buttonGO.name);
+                if(type != null) _buttonsDictionary.Add(type, _buttonGO.GetComponentInChildren<Button>());
             }
             Clear();
         }
@@ -39,37 +40,49 @@ namespace Strategy
         private Type ConvertNameToType(string name) =>
             name switch
             {
-                "AttackCommand" => typeof(IAttackCommand),
-                "ProduceUnitCommand" => typeof(IProduceUnitCommand),
-                "MoveCommand" => typeof(IMoveCommand),
-                "PatrolCommand" => typeof(IPatrolCommand),
-                "HoldCommand" => typeof(IStopCommand),
+                "AttackCommand" => typeof(CommandExecutor<IAttackCommand>),
+                "ProduceUnitCommand" => typeof(CommandExecutor<IProduceUnitCommand>),
+                "MoveCommand" => typeof(CommandExecutor<IMoveCommand>),
+                "PatrolCommand" => typeof(CommandExecutor<IPatrolCommand>),
+                "HoldCommand" => typeof(CommandExecutor<IStopCommand>),
                 _ => null
             };
 
 
         public void Clear()
         {
-            foreach(Button b in _buttonsDictionary.Values) SetActiveButton(b, false);
+            foreach (Button b in _buttonsDictionary.Values)
+            {
+                b.onClick.RemoveAllListeners();
+                SetActiveButton(b, false);
+            }
         }
 
         private void SetActiveButton(Button b, bool active) => b.transform.parent.gameObject.SetActive(active);
 
-        public void SetLayout(IEnumerable<Type> commandTypes)
+        public void SetLayout(List<ICommandExecutor> commandTypes)
         {
             if (commandTypes == null || commandTypes.Count() == 0) return;
 
             foreach (var t in commandTypes)
             {
-                if (_buttonsDictionary.ContainsKey(t))
+                var button = GetButtonByExecutorType(t);
+                if(button != null)
                 {
-                    SetActiveButton(_buttonsDictionary[t], true);
-                    _buttonsDictionary[t].onClick.AddListener(() => OnCommand?.Invoke(t));
+                    SetActiveButton(button, true);
+                    button.onClick.AddListener(() => OnCommand?.Invoke(t));
                 }
             }
         }
+        private Button GetButtonByExecutorType(ICommandExecutor executorType) =>
+             _buttonsDictionary.Where(kvp => kvp.Key.IsAssignableFrom(executorType.GetType())).FirstOrDefault().Value;
 
-        public void BlockCommands() => SetInteraction(false);
+        public void BlockCommands(ICommandExecutor executor)
+        {
+            SetInteraction(true);
+            GetButtonByExecutorType(executor).interactable = false;
+        }
+
         public void UnBlockCommands() => SetInteraction(true);
         private void SetInteraction(bool on)
         {

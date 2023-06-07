@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Strategy
 {
@@ -16,6 +17,8 @@ namespace Strategy
 
         void Update()
         {
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+
             if (Input.GetMouseButtonUp(0)) OnLeftClick?.Invoke(Input.mousePosition);
             if (Input.GetMouseButtonUp(1)) OnRightClick?.Invoke(Input.mousePosition);
         }

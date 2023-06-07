@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows;
-using WizardsPlatformer;
+using Zenject;
 
 namespace Strategy
 {
@@ -14,25 +14,23 @@ namespace Strategy
 
         private InputController _inputController;
         private LevelObjectUIView _levelObjectUIView;
-        private SubscribtableProperty<ISelectable> _currentSelected;
-        private UserControlsModel _userControlsModel;
+        [Inject] private IUserControlsModel _userControlsModel;
+        [Inject] private ICommandsModel _commandsModel;
         private CommandsController _commandsController;
 
         private void Start()
         {
-            _userControlsModel = new UserControlsModel();
             _inputController = new InputController(input.GetComponent<InputView>());
             _levelObjectUIView = levelObjectUI.GetComponent<LevelObjectUIView>();
-            _commandsController = new CommandsController(controlsPanel.GetComponent<IControlsUIView>());
-
-
-            _currentSelected = new SubscribtableProperty<ISelectable>();
+            _commandsController = new CommandsController(controlsPanel.GetComponent<IControlsUIView>(), _commandsModel);
 
             _inputController.OnSelection += s => _userControlsModel.CurrentSelected.Value = s;
+            _inputController.OnLeftClick += lp => _userControlsModel.LeftClickPosition.Value = lp;
+            _inputController.OnRightClick += rp => _userControlsModel.RightClickPosition.Value = rp;
+            _inputController.OnRightSelection += rs => _userControlsModel.TargetSelected.Value = rs;
 
             _userControlsModel.CurrentSelected.SubscribeOnValueChange(s => _levelObjectUIView.DisplaySelected(s));
             _userControlsModel.CurrentSelected.SubscribeOnValueChange(s => _commandsController.OnSelectedChanged(s));
-            
         }
     }
 }

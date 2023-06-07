@@ -6,5 +6,6 @@ namespace Strategy
 {
     public interface IPatrolCommand : ICommand
     {
+        Vector3 PatrolTarget { get; }
     }
 }

@@ -8,7 +8,7 @@ namespace Strategy
     {
         public override void ExecuteSpecific(IPatrolCommand command)
         {
-            Debug.Log($"{transform.name} starts on patrol");
+            Debug.Log($"{transform.name} starts on patrol from {transform.position} to {command.PatrolTarget}");
         }
     }
 }

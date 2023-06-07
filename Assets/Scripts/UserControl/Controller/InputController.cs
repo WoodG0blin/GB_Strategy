@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using WizardsPlatformer;
 
 namespace Strategy
 {
@@ -13,15 +12,18 @@ namespace Strategy
     {
         private IInputView _inputView;
         private Camera _camera;
-        private ISelectable _currentSelected;
         private Highlighter _highlighter;
 
         public event Action<ISelectable> OnSelection;
+        public event Action<Vector3> OnLeftClick;
+        public event Action<Vector3> OnRightClick;
+        public event Action<IDamagable> OnRightSelection;
+
         public InputController(IInputView input)
         {
             _inputView = input;
-            _inputView.OnLeftClick += OnLeftClick;
-            _inputView.OnRightClick += OnRightClick;
+            _inputView.OnLeftClick += LeftClick;
+            _inputView.OnRightClick += RightClick;
 
             _camera = Camera.main;
 
@@ -30,33 +32,50 @@ namespace Strategy
 
         public void Dispose()
         {
-            _inputView.OnLeftClick -= OnLeftClick;
-            _inputView.OnRightClick -= OnRightClick;
+            _inputView.OnLeftClick -= LeftClick;
+            _inputView.OnRightClick -= RightClick;
             _inputView = null;
             _camera = null;
         }
 
-        private void OnLeftClick(Vector3 position)
+        private void LeftClick(Vector3 position)
         {
             var hits = Physics.RaycastAll(_camera.ScreenPointToRay(position));
+            if (hits == null) return;
 
-            if (hits == null || EventSystem.current.IsPointerOverGameObject()) return;
-
-            _highlighter.HighLight(_currentSelected, false);
-
-            _currentSelected = hits
+            var selected = hits
                 .Select(hit => hit.collider.GetComponentInParent<ISelectable>())
                 .Where(c => c != null)
                 .FirstOrDefault();
 
-            _highlighter.HighLight(_currentSelected, true);
+            _highlighter.HighLight(selected);
 
-            OnSelection?.Invoke(_currentSelected);
+            OnSelection?.Invoke(selected);
+
+            SendGroundsCoordinates(position, OnLeftClick);
         }
 
-        private void OnRightClick(Vector3 position)
+        private void RightClick(Vector3 position)
         {
-            Debug.Log($"Right mouse button clicked at {position}");
+            var hits = Physics.RaycastAll(_camera.ScreenPointToRay(position));
+            if (hits == null) return;
+
+            var target = hits
+                .Select(hit => hit.collider.GetComponentInParent<IDamagable>())
+                .Where(c => c != null)
+                .FirstOrDefault();
+
+            OnRightSelection?.Invoke(target);
+
+            SendGroundsCoordinates(position, OnRightClick);
+        }
+
+        private void SendGroundsCoordinates(Vector3 position, Action<Vector3> call)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(_camera.ScreenPointToRay(position), out hit, 1000, LayerMask.GetMask("Grounds")))
+                call?.Invoke(hit.point);
+            else call?.Invoke(Vector3.zero);
         }
     }
 }

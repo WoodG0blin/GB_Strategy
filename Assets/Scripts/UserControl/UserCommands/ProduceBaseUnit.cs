@@ -6,8 +6,8 @@ namespace Strategy
 {
     internal class ProduceBaseUnit : IProduceUnitCommand
     {
-        [InjectAsset("Unit")] public GameObject Prefab { get; private set; }
+        public GameObject Prefab { get; private set; }
 
-        //[InjectAsset("Unit")] private GameObject _prefab;
+        public ProduceBaseUnit(GameObject unit) => Prefab = unit;
     }
 }
