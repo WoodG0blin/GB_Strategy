@@ -7,15 +7,14 @@ namespace Strategy
 {
     internal class MoveExecutor : CommandExecutor<IMoveCommand>
     {
-        private NavMeshAgent _navMeshAgent;
+        private UnitMovement _unitMovement;
         private void Start()
         {
-            if(!TryGetComponent<NavMeshAgent>(out _navMeshAgent)) _navMeshAgent = gameObject.AddComponent<NavMeshAgent>();
+            if (!TryGetComponent<UnitMovement>(out _unitMovement)) _unitMovement = gameObject.AddComponent<UnitMovement>();
         }
         public override void ExecuteSpecific(IMoveCommand command)
         {
-            _navMeshAgent.isStopped = false;
-            _navMeshAgent.SetDestination(command.Direction);
+            _unitMovement.MoveTo(command.Direction);
         }
     }
 }

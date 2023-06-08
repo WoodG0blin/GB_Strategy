@@ -7,14 +7,14 @@ namespace Strategy
 {
     internal class HoldExecutor : CommandExecutor<IStopCommand>
     {
-        private NavMeshAgent _navMeshAgent;
+        private UnitMovement _unitMovement;
         private void Start()
         {
-            if (!TryGetComponent<NavMeshAgent>(out _navMeshAgent)) _navMeshAgent = gameObject.AddComponent<NavMeshAgent>();
+            if (!TryGetComponent<UnitMovement>(out _unitMovement)) _unitMovement = gameObject.AddComponent<UnitMovement>();
         }
         public override void ExecuteSpecific(IStopCommand command)
         {
-            _navMeshAgent.isStopped = true;
+            _unitMovement.Stop();
         }
     }
 }
