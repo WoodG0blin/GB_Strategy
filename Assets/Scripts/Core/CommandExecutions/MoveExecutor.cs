@@ -14,7 +14,7 @@ namespace Strategy
         }
         public override void ExecuteSpecific(IMoveCommand command)
         {
-            //Debug.Log($"{transform.name} moves to {command.Direction}");
+            _navMeshAgent.isStopped = false;
             _navMeshAgent.SetDestination(command.Direction);
         }
     }

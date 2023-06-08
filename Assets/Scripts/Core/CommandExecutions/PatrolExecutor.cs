@@ -18,6 +18,7 @@ namespace Strategy
         }
         public override void ExecuteSpecific(IPatrolCommand command)
         {
+            _navMeshAgent.isStopped = false;
             _patrolPoints = new List<Vector3>();
             _patrolPoints.Add(new Vector3(transform.position.x, 0, transform.position.z));
             _patrolPoints.Add(command.PatrolTarget);
