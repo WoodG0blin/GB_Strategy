@@ -5,33 +5,12 @@ namespace Strategy
 {
     public class SubscribtableProperty<T> : IAwaitable<T>
     {
-        public class NewValueNotifier<TAwaited> : IAwaiter<TAwaited>
+        public class NewValueNotifier : Awaiter<SubscribtableProperty<T>, T>
         {
-            private readonly SubscribtableProperty<TAwaited> _subscribtableProperty;
-            private TAwaited _result;
-            private Action _continuation;
-            private bool _isCompleted;
-
-            public NewValueNotifier(SubscribtableProperty<TAwaited> subscribtableProperty)
-            {
-                _subscribtableProperty= subscribtableProperty;
-                _subscribtableProperty.SubscribeOnValueChange(OnNewValue);
-            }
-
-            private void OnNewValue(TAwaited value)
-            {
-                _subscribtableProperty.UnsubscribeOnValueChange(OnNewValue);
-                _result = _subscribtableProperty.Value;
-                _isCompleted= true;
-                _continuation?.Invoke();
-            }
-            public void OnCompleted(Action continuation)
-            {
-                if (_isCompleted) continuation?.Invoke();
-                else _continuation = continuation;
-            }
-            public bool IsCompleted => _isCompleted;
-            public TAwaited GetResult() => _result;
+            public NewValueNotifier(SubscribtableProperty<T> awaitable) : base(awaitable) { }
+            protected override T ReceiveResult() => _awaitable.Value;
+            protected override void SubscribeOnAwaitable(Action<T> subscription) => _awaitable.SubscribeOnValueChange(subscription);
+            protected override void UnSubscribeFromAwaitable(Action<T> onNewValue) => _awaitable.UnsubscribeOnValueChange(onNewValue);
         }
 
         protected T _value;
@@ -49,7 +28,7 @@ namespace Strategy
         public void SubscribeOnValueChange(Action<T> onValueChange) => _onValueChange += onValueChange;
         public void UnsubscribeOnValueChange(Action<T> onValueChange) => _onValueChange -= onValueChange;
 
-        public IAwaiter<T> GetAwaiter() => new NewValueNotifier<T>(this);
+        public IAwaiter<T> GetAwaiter() => new NewValueNotifier(this);
     }
 
     public class SubscriptableTrigger : SubscribtableProperty<bool>
