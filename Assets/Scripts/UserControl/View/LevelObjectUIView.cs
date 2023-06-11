@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Zenject;
 
 namespace Strategy
 {
@@ -15,7 +16,13 @@ namespace Strategy
         [SerializeField] private Slider _healthSlider;
         [SerializeField] private TextMeshProUGUI _healthText;
 
-        [field : SerializeField] public ControlsUIView Controls { get; private set; }
+        [field: SerializeField] public ControlsUIView Controls { get; private set; }
+
+        [Inject(Id = "LeftClick")] private SubscribtableProperty<ISelectable> _currentSelected;
+        private void Start()
+        {
+            _currentSelected.SubscribeOnValueChange(s => DisplaySelected(s));
+        }
 
         public void DisplaySelected(ISelectable selected)
         {
