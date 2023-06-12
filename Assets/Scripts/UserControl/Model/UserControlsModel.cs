@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -7,24 +9,30 @@ namespace Strategy
 {
     internal interface IUserControlsModel
     {
-        SubscribtableProperty<ISelectable> CurrentSelected { get; }
-        SubscribtableProperty<Vector3> LeftClickPosition { get; }
-        SubscribtableProperty<Vector3> RightClickPosition { get; }
-        SubscribtableProperty<IDamagable> TargetSelected { get; }
+        ReactivePropertyAsync<ISelectable> CurrentSelected { get; }
+        ReactivePropertyAsync<Vector3> LeftClickPosition { get; }
+        ReactivePropertyAsync<Vector3> RightClickPosition { get; }
+        ReactivePropertyAsync<IDamagable> TargetSelected { get; }
     }
 
     internal class UserControlsModel : IUserControlsModel
     {
-        public SubscribtableProperty<ISelectable> CurrentSelected { get; private set; }
-        public SubscribtableProperty<Vector3> LeftClickPosition { get; private set; }
-        public SubscribtableProperty<Vector3> RightClickPosition { get; private set; }
-        public SubscribtableProperty<IDamagable> TargetSelected { get; private set; }
+        public ReactivePropertyAsync<ISelectable> CurrentSelected => _currentSelected;
+        public ReactivePropertyAsync<Vector3> LeftClickPosition => _leftClickPosition;
+        public ReactivePropertyAsync<Vector3> RightClickPosition => _rightClickPosition;
+        public ReactivePropertyAsync<IDamagable> TargetSelected => _targetSelected;
+
+        private ReactivePropertyAsync<ISelectable> _currentSelected;
+        private ReactivePropertyAsync<Vector3> _leftClickPosition;
+        private ReactivePropertyAsync<Vector3> _rightClickPosition;
+        private ReactivePropertyAsync<IDamagable> _targetSelected;
+
         public UserControlsModel()
         {
-            CurrentSelected = new SubscribtableProperty<ISelectable>();
-            LeftClickPosition = new SubscribtableProperty<Vector3>();
-            RightClickPosition = new SubscribtableProperty<Vector3>();
-            TargetSelected = new SubscribtableProperty<IDamagable>();
+            _currentSelected = new ReactivePropertyAsync<ISelectable>();
+            _leftClickPosition = new ReactivePropertyAsync<Vector3>();
+            _rightClickPosition = new ReactivePropertyAsync<Vector3>();
+            _targetSelected = new ReactivePropertyAsync<IDamagable>();
         }
     }
 }

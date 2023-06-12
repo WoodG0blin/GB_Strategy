@@ -12,10 +12,10 @@ namespace Strategy
         private Camera _camera;
         private Highlighter _highlighter;
 
-        [Inject(Id = "LeftClick")] private SubscribtableProperty<ISelectable> _selected;
-        [Inject(Id = "RightClick")] private SubscribtableProperty<IDamagable> _target;
-        [Inject(Id = "LeftClick")] private SubscribtableProperty<Vector3> _leftClickPosition;
-        [Inject(Id = "RightClick")] private SubscribtableProperty<Vector3> _rightClickPosition;
+        [Inject(Id = "LeftClick")] private ReactivePropertyAsync<ISelectable> _selected;
+        [Inject(Id = "RightClick")] private ReactivePropertyAsync<IDamagable> _target;
+        [Inject(Id = "LeftClick")] private ReactivePropertyAsync<Vector3> _leftClickPosition;
+        [Inject(Id = "RightClick")] private ReactivePropertyAsync<Vector3> _rightClickPosition;
 
         private void Start()
         {

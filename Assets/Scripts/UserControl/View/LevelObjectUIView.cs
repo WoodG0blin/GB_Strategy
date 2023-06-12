@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Zenject;
+using UniRx;
 
 namespace Strategy
 {
@@ -18,10 +19,10 @@ namespace Strategy
 
         [field: SerializeField] public ControlsUIView Controls { get; private set; }
 
-        [Inject(Id = "LeftClick")] private SubscribtableProperty<ISelectable> _currentSelected;
+        [Inject(Id = "LeftClick")] private ReactivePropertyAsync<ISelectable> _currentSelected;
         private void Start()
         {
-            _currentSelected.SubscribeOnValueChange(s => DisplaySelected(s));
+            _currentSelected.Subscribe(s => DisplaySelected(s));
         }
 
         public void DisplaySelected(ISelectable selected)

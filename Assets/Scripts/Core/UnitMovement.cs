@@ -12,8 +12,11 @@ namespace Strategy
         {
             public StopAwaiter(UnitMovement awaitable) : base(awaitable) { }
             protected override AsyncExtensions.Void ReceiveResult() => new AsyncExtensions.Void();
-            protected override void SubscribeOnAwaitable(Action<AsyncExtensions.Void> subscription) =>
+            protected override IDisposable SubscribeOnAwaitable(Action<AsyncExtensions.Void> subscription)
+            {
                 _awaitable.OnStop += subscription;
+                return default;
+            }
             protected override void UnSubscribeFromAwaitable(Action<AsyncExtensions.Void> onNewValue) =>
                 _awaitable.OnStop -= onNewValue;
         }

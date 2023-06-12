@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using UniRx;
 
 namespace Strategy
 {
@@ -22,7 +23,7 @@ namespace Strategy
         private Dictionary<Type, Button> _buttonsDictionary;
 
         [Inject] private ICommandsModel _commandsModel;
-        [Inject(Id = "LeftClick")] private SubscribtableProperty<ISelectable> _selected;
+        [Inject(Id = "LeftClick")] private ReactivePropertyAsync<ISelectable> _selected;
 
         void Start()
         {
@@ -32,7 +33,7 @@ namespace Strategy
             _commandsModel.OnCommandCanceled += UnBlockCommands;
             _commandsModel.OnCommandIssued += UnBlockCommands;
 
-            _selected.SubscribeOnValueChange(s =>
+            _selected.Subscribe(s =>
             {
                 Clear();
                 if(s != null)
