@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Net.Sockets;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace Strategy
 {
@@ -21,24 +21,32 @@ namespace Strategy
         private TResult _result;
         private Action _continuation;
         private bool _isCompleted;
+        private IDisposable _subscription;
+        private bool next = false;
 
         public Awaiter(T awaitable)
         {
             _awaitable = awaitable;
-            SubscribeOnAwaitable(OnNewValue);
+            _subscription = SubscribeOnAwaitable(OnNewValue);
         }
 
         private void OnNewValue(TResult value)
         {
+            if (!next)
+            {
+                next = true;
+                return;
+            }
             UnSubscribeFromAwaitable(OnNewValue);
             _result = ReceiveResult();
+            _subscription?.Dispose();
             _isCompleted = true;
             _continuation?.Invoke();
         }
 
         protected abstract TResult ReceiveResult();
-        protected abstract void SubscribeOnAwaitable(Action<TResult> subscription);
-        protected abstract void UnSubscribeFromAwaitable(Action<TResult> onNewValue);
+        protected abstract IDisposable SubscribeOnAwaitable(Action<TResult> subscription);
+        protected virtual void UnSubscribeFromAwaitable(Action<TResult> onNewValue) { }
 
         public void OnCompleted(Action continuation)
         {

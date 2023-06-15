@@ -28,7 +28,10 @@ namespace Strategy
         private bool _pending;
 
         [Inject]
-        private void Init(CommandFactory factory) => _commandsFactory= factory;
+        private void Init(CommandFactory factory)
+        {
+            _commandsFactory = factory;
+        }
 
         public void OnCommandButtonClicked(ICommandExecutor executor)
         {

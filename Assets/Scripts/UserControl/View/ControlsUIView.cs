@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
+using UniRx;
 
 namespace Strategy
 {
     internal interface IControlsUIView
     {
-        event Action<ICommandExecutor> OnCommand;
-
         void Clear();
         void SetLayout(List<ICommandExecutor> commandTypes);
         void BlockCommands(ICommandExecutor executor);
@@ -22,13 +22,28 @@ namespace Strategy
 
         private Dictionary<Type, Button> _buttonsDictionary;
 
-        public event Action<ICommandExecutor> OnCommand;
+        [Inject] private ICommandsModel _commandsModel;
+        [Inject(Id = "LeftClick")] private ReactivePropertyAsync<ISelectable> _selected;
 
         void Start()
         {
             _buttonsDictionary = new Dictionary<Type, Button>();
 
-            for(int i = 0; i < _controlsContainer.childCount; i++)
+            _commandsModel.OnCommandChosen += BlockCommands;
+            _commandsModel.OnCommandCanceled += UnBlockCommands;
+            _commandsModel.OnCommandIssued += UnBlockCommands;
+
+            _selected.Subscribe(s =>
+            {
+                Clear();
+                if(s != null)
+                {
+                    SetLayout(s.Commands);
+                    _commandsModel.OnSelectionChanged();
+                }
+            });
+
+            for (int i = 0; i < _controlsContainer.childCount; i++)
             {
                 var _buttonGO = _controlsContainer.GetChild(i);
                 var type = ConvertNameToType(_buttonGO.name);
@@ -70,7 +85,7 @@ namespace Strategy
                 if(button != null)
                 {
                     SetActiveButton(button, true);
-                    button.onClick.AddListener(() => OnCommand?.Invoke(t));
+                    button.onClick.AddListener(() => _commandsModel.OnCommandButtonClicked(t));
                 }
             }
         }

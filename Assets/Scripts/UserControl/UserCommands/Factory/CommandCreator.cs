@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Zenject;
+using UnityEngine;
 
 namespace Strategy
 {
@@ -29,7 +30,7 @@ namespace Strategy
 
     internal abstract class CancellableCommandCreator<T, TArgument> : CommandCreator<T> where T : ICommand
     {
-        [Inject(Id = "RightClickPosition")] private SubscribtableProperty<TArgument> _subscribtableProperty;
+        [Inject(Id = "RightClick")] private ReactivePropertyAsync<TArgument> _subscribtableProperty;
         private CancellationTokenSource _cancellationTokenSource;
 
         protected override async void CreateSpecificCommand(Action<T> callback)
