@@ -6,7 +6,6 @@ namespace Strategy
 {
     public interface IProduceUnitCommand : ICommand
     {
-        [InjectAsset("Unit")] GameObject Prefab { get; }
-        //GameObject Prefab { get; }
+        IUnitSettings UnitSettings { get; }
     }
 }

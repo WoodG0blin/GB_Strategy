@@ -37,7 +37,7 @@ namespace Strategy
                         _selected.Value = selected;
                     }
                     _leftClickPosition.Value = GetGroundsCoordinates(cortege.Item1);
-                });
+                }).AddTo(this);
 
             var rightClickStream = interactableStream
                 .Where(_ => Input.GetMouseButtonUp(1))
@@ -50,7 +50,7 @@ namespace Strategy
                         _target.Value = selected;
                     }
                     _rightClickPosition.Value = GetGroundsCoordinates(cortege.Item1);
-                });
+                }).AddTo(this);
         }
 
         private Vector3 GetGroundsCoordinates(Ray ray)
