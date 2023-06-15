@@ -1,4 +1,5 @@
 using Strategy;
+using System;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -12,10 +13,11 @@ public class UserControlInstaller : MonoInstaller
 
         Container.Bind<IUserControlsModel>().To<UserControlsModel>().FromInstance(model).Lazy();
 
-        Container.Bind<ReactivePropertyAsync<Vector3>>().WithId("LeftClick").FromInstance(model.LeftClickPosition);
-        Container.Bind<ReactivePropertyAsync<Vector3>>().WithId("RightClick").FromInstance(model.RightClickPosition);
-        Container.Bind<ReactivePropertyAsync<IDamagable>>().WithId("RightClick").FromInstance(model.TargetSelected);
-        Container.Bind<ReactivePropertyAsync<ISelectable>>().WithId("LeftClick").FromInstance(model.CurrentSelected);
+        Container.Bind<LeftClickPosition>().FromInstance(model.leftClickPosition);
+        Container.Bind<RightClickPosition>().FromInstance(model.rightClickPosition);
+        Container.Bind<TargetSelected>().FromInstance(model.targetSelected);
+        Container.Bind<ObjectSelected>().FromInstance(model.currentSelected);
+        Container.Bind<IObservable<ISelectable>>().To<ObjectSelected>().FromInstance(model.currentSelected);
 
         Container.Bind<AttackCommandCreator>().FromNew().AsSingle();
         Container.Bind<ProduceUnitCommandCreator>().FromNew().AsSingle();

@@ -23,7 +23,7 @@ namespace Strategy
         private Dictionary<Type, Button> _buttonsDictionary;
 
         [Inject] private ICommandsModel _commandsModel;
-        [Inject(Id = "LeftClick")] private ReactivePropertyAsync<ISelectable> _selected;
+        [Inject] private ObjectSelected _selected;
 
         void Start()
         {

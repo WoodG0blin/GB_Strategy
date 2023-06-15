@@ -2,6 +2,9 @@ using System;
 using System.Threading;
 using Zenject;
 using UnityEngine;
+using UniRx;
+using System.Threading.Tasks;
+using System.Data;
 
 namespace Strategy
 {
@@ -28,9 +31,9 @@ namespace Strategy
         public virtual void Cancel() { }
     }
 
-    internal abstract class CancellableCommandCreator<T, TArgument> : CommandCreator<T> where T : ICommand
+    internal abstract class CancellableCommandCreator<T, TObserver, TArgument> : CommandCreator<T> where T : ICommand where TObserver : IObservable<TArgument>
     {
-        [Inject(Id = "RightClick")] private ReactivePropertyAsync<TArgument> _subscribtableProperty;
+        [Inject] private TObserver _subscribtableProperty;
         private CancellationTokenSource _cancellationTokenSource;
 
         protected override async void CreateSpecificCommand(Action<T> callback)
@@ -38,8 +41,9 @@ namespace Strategy
             _cancellationTokenSource = new CancellationTokenSource();
             try
             {
-                var argument = await _subscribtableProperty.WithCancellation(_cancellationTokenSource.Token);
-                callback?.Invoke(SetCallbackArgument(argument));
+                callback?.Invoke(SetCallbackArgument(
+                    await _subscribtableProperty.First().ToTask(_cancellationTokenSource.Token)
+                    ));
             }
             catch { }
         }

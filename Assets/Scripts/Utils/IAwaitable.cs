@@ -22,7 +22,7 @@ namespace Strategy
         private Action _continuation;
         private bool _isCompleted;
         private IDisposable _subscription;
-        private bool next = false;
+        //private bool next = false;
 
         public Awaiter(T awaitable)
         {
@@ -32,11 +32,11 @@ namespace Strategy
 
         private void OnNewValue(TResult value)
         {
-            if (!next)
-            {
-                next = true;
-                return;
-            }
+            //if (!next)
+            //{
+            //    next = true;
+            //    return;
+            //}
             UnSubscribeFromAwaitable(OnNewValue);
             _result = ReceiveResult();
             _subscription?.Dispose();
