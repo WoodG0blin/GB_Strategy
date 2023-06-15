@@ -9,30 +9,30 @@ namespace Strategy
 {
     internal interface IUserControlsModel
     {
-        ReactivePropertyAsync<ISelectable> CurrentSelected { get; }
-        ReactivePropertyAsync<Vector3> LeftClickPosition { get; }
-        ReactivePropertyAsync<Vector3> RightClickPosition { get; }
-        ReactivePropertyAsync<IDamagable> TargetSelected { get; }
+        IObservable<ISelectable> CurrentSelected { get; }
+        IObservable<Vector3> LeftClickPosition { get; }
+        IObservable<Vector3> RightClickPosition { get; }
+        IObservable<IDamagable> TargetSelected { get; }
     }
 
     internal class UserControlsModel : IUserControlsModel
     {
-        public ReactivePropertyAsync<ISelectable> CurrentSelected => _currentSelected;
-        public ReactivePropertyAsync<Vector3> LeftClickPosition => _leftClickPosition;
-        public ReactivePropertyAsync<Vector3> RightClickPosition => _rightClickPosition;
-        public ReactivePropertyAsync<IDamagable> TargetSelected => _targetSelected;
+        public IObservable<ISelectable> CurrentSelected => currentSelected;
+        public IObservable<Vector3> LeftClickPosition => leftClickPosition;
+        public IObservable<Vector3> RightClickPosition => rightClickPosition;
+        public IObservable<IDamagable> TargetSelected => targetSelected;
 
-        private ReactivePropertyAsync<ISelectable> _currentSelected;
-        private ReactivePropertyAsync<Vector3> _leftClickPosition;
-        private ReactivePropertyAsync<Vector3> _rightClickPosition;
-        private ReactivePropertyAsync<IDamagable> _targetSelected;
+        public ObjectSelected currentSelected;
+        public LeftClickPosition leftClickPosition;
+        public RightClickPosition rightClickPosition;
+        public TargetSelected targetSelected;
 
         public UserControlsModel()
         {
-            _currentSelected = new ReactivePropertyAsync<ISelectable>();
-            _leftClickPosition = new ReactivePropertyAsync<Vector3>();
-            _rightClickPosition = new ReactivePropertyAsync<Vector3>();
-            _targetSelected = new ReactivePropertyAsync<IDamagable>();
+            currentSelected = new ObjectSelected();
+            leftClickPosition = new LeftClickPosition();
+            rightClickPosition = new RightClickPosition();
+            targetSelected = new TargetSelected();
         }
     }
 }

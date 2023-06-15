@@ -5,7 +5,7 @@ using UniRx.InternalUtil;
 
 namespace UniRx
 {
-    public sealed class Subject<T> : ISubject<T>, IDisposable, IOptimizedObservable<T>
+    public class Subject<T> : ISubject<T>, IDisposable, IOptimizedObservable<T>
     {
         object observerLock = new object();
 

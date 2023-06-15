@@ -1,78 +1,25 @@
 using System;
-using System.Runtime.CompilerServices;
 using UniRx;
 
 namespace Strategy
 {
-    public class SubscribtableProperty<T> : IAwaitable<T>
+    public abstract class Subscribtable<T, TValue>: IObservable<TValue> where T : IObservable<TValue>
     {
-        public class NewValueNotifier : Awaiter<SubscribtableProperty<T>, T>
-        {
-            public NewValueNotifier(SubscribtableProperty<T> awaitable) : base(awaitable) { }
-            protected override T ReceiveResult() => _awaitable.Value;
-            protected override IDisposable SubscribeOnAwaitable(Action<T> subscription) { _awaitable.SubscribeOnValueChange(subscription); return default;}
-            protected override void UnSubscribeFromAwaitable(Action<T> onNewValue) => _awaitable.UnsubscribeOnValueChange(onNewValue);
-        }
+        protected T observable;
 
-        protected T _value;
-        protected Action<T> _onValueChange;
-
-        public virtual T Value
-        {
-            get => _value;
-            set
-            {
-                _value = value;
-                _onValueChange?.Invoke(_value);
-            }
-        }
-        public void SubscribeOnValueChange(Action<T> onValueChange) => _onValueChange += onValueChange;
-        public void UnsubscribeOnValueChange(Action<T> onValueChange) => _onValueChange -= onValueChange;
-
-        public IAwaiter<T> GetAwaiter() => new NewValueNotifier(this);
+        public IDisposable Subscribe(IObserver<TValue> observer) => observable.Subscribe(observer);
     }
 
-    public class ReactivePropertyAsync<T> : ReactiveProperty<T>, IAwaitable<T>
+    public abstract class SubscribtableStateless<T> : Subscribtable<Subject<T>, T>
     {
-        public class NewValueNotifier : Awaiter<ReactivePropertyAsync<T>, T>
-        {
-            public NewValueNotifier(ReactivePropertyAsync<T> awaitable) : base(awaitable) { }
-            protected override T ReceiveResult() => _awaitable.Value;
-            protected override IDisposable SubscribeOnAwaitable(Action<T> subscription) => _awaitable.Subscribe(subscription);
-        }
-        public IAwaiter<T> GetAwaiter() => new NewValueNotifier(this);
+        private Subject<T> _innerValue = new Subject<T>();
+        public SubscribtableStateless() => observable = _innerValue;
+        public T Value { set => _innerValue.OnNext(value); }
     }
-
-    public class SubscriptableTrigger : SubscribtableProperty<bool>
+    public abstract class SubscribtableStatefull<T> : Subscribtable<ReactiveProperty<T>, T>
     {
-        public override bool Value
-        {
-            get => _value;
-            set
-            {
-                if (!_value.Equals(value))
-                {
-                    _value = value;
-                    _onValueChange?.Invoke(_value);
-                    _value = !value;
-                }
-            }
-        }
-    }
-
-    public class SubscribtablePropertyWithEqualsCheck<T> : SubscribtableProperty<T>
-    {
-        public override T Value
-        {
-            get => _value;
-            set
-            {
-                if (!_value.Equals(value))
-                {
-                _value = value;
-                _onValueChange?.Invoke(_value);
-                }
-            }
-        }
+        private ReactiveProperty<T> _innerValue = new ReactiveProperty<T>();
+        public SubscribtableStatefull() => observable = _innerValue;
+        public T Value { get => _innerValue.Value; set => _innerValue.Value = value; }
     }
 }

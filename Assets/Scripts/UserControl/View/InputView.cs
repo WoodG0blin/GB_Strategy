@@ -12,10 +12,10 @@ namespace Strategy
         private Camera _camera;
         private Highlighter _highlighter;
 
-        [Inject(Id = "LeftClick")] private ReactivePropertyAsync<ISelectable> _selected;
-        [Inject(Id = "RightClick")] private ReactivePropertyAsync<IDamagable> _target;
-        [Inject(Id = "LeftClick")] private ReactivePropertyAsync<Vector3> _leftClickPosition;
-        [Inject(Id = "RightClick")] private ReactivePropertyAsync<Vector3> _rightClickPosition;
+        [Inject] private ObjectSelected _selected;
+        [Inject] private TargetSelected _target;
+        [Inject] private LeftClickPosition _leftClickPosition;
+        [Inject] private RightClickPosition _rightClickPosition;
 
         private void Start()
         {
@@ -37,7 +37,7 @@ namespace Strategy
                         _selected.Value = selected;
                     }
                     _leftClickPosition.Value = GetGroundsCoordinates(cortege.Item1);
-                });
+                }).AddTo(this);
 
             var rightClickStream = interactableStream
                 .Where(_ => Input.GetMouseButtonUp(1))
@@ -50,7 +50,7 @@ namespace Strategy
                         _target.Value = selected;
                     }
                     _rightClickPosition.Value = GetGroundsCoordinates(cortege.Item1);
-                });
+                }).AddTo(this);
         }
 
         private Vector3 GetGroundsCoordinates(Ray ray)
